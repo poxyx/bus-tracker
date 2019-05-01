@@ -114,7 +114,7 @@ include '../class/mysql_class.php';
     <br>
 
     <b>Route Name</b><br>
-        <input type="text" class="route_name" name="route_name" style="width:100%" required>
+        <input type="text" id="route_name" name="route_name" style="width:100%">
     <br>
     <br>
 
@@ -162,8 +162,7 @@ include '../class/mysql_class.php';
             waypts.push({
               location: checkboxArray[i].value,
               stopover: true
-            });
-            
+            });          
           }
         }
 
@@ -196,29 +195,51 @@ include '../class/mysql_class.php';
 
       }
 
+      var _bus   
+      var _start 
+      var _end   
+
       $("select.bus_id").change(function(){
-            var _bus = $(this).children("option:selected").val();
-               console.log(_bus);
+            _bus = $(this).children("option:selected").val();
+            //    console.log(_bus);
       });
 
       $("select.start").change(function(){
-            var _start = $(this).children("option:selected").val();
-               console.log(_start);
+            _start = $(this).children("option:selected").val();
+            //    console.log(_start);
       });
 
       $("select.end").change(function(){
-            var _end = $(this).children("option:selected").val();
-               console.log(_end);
+            _end = $(this).children("option:selected").val();
+            //    console.log(_end);
       });
 
-      var _name = $("select.route_name").val()
+      function insertRouteData(waypoint,start,end,bus_id,stop_name) {
 
-      function insertRouteData() {
-
-        console.log(waypts);
-        
+        $.ajax({
+            url: '../ajax/assignRoute.php',
+            type: 'POST',
+            data: jQuery.param({ stop: waypoint, start : start,end : end,bus_id : bus_id , name : stop_name}) ,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function (response) {
+                alert(response);
+                location.reload();
+            },
+            error: function () {
+                console.log("error");
+            }
+        });     
 
       }
+
+      document.getElementById('submit').addEventListener('click', function() {
+                
+        var _name = $('#route_name').val();
+                insertRouteData(waypts,_start,_end,_bus,_name)
+
+                // console.log(waypts) 
+                // console.log(_name)
+     });
 
     </script>
    <script async defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo $api_key;?>&callback=initMap"></script>
