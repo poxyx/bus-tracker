@@ -83,6 +83,8 @@ include '../class/mysql_class.php';
                 <option value="<?php echo $key['route_name'];?>"> <?php echo $key['route_name'];?> </option>
             <?php endforeach;?>
         </select>
+        <br><br>
+        <button id="nearest">FIND NEARBY STOP</button>
     <div>
 
     <script type="text/javascript" src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
@@ -181,6 +183,7 @@ include '../class/mysql_class.php';
       var bounds = new google.maps.LatLngBounds;
       var geocoder = new google.maps.Geocoder;
       var infoWindow = new google.maps.InfoWindow;
+      var markers = [];
 
       var mapOptions = {
         zoom: 18,
@@ -253,7 +256,6 @@ include '../class/mysql_class.php';
       }
 
       var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
       //infoWindow.open(map);
 
       directionsDisplay.setMap(map);
@@ -282,7 +284,7 @@ include '../class/mysql_class.php';
       {
         marker.setMap(null);
         changeMarkerPosition(marker, location)
-        //getEstimatedArrival(fb_lat + "," + fb_long, "6.051005,116.128783")
+        //getEstimatedArrival(fb_lat + "," + fb_long, userPosition)
       }, 3000);
 
       $("select.route_name")
@@ -315,6 +317,7 @@ include '../class/mysql_class.php';
               result.shift()
               result.pop()
 
+              markers = result;
               startTracking()
               calculateAndDisplayRoute(route_start.location, route_end.location, directionsService, directionsDisplay, result)
             },
@@ -324,14 +327,50 @@ include '../class/mysql_class.php';
             }
           });
         });
+
+        $('#nearest').click(function(){
+            // console.log(markers);
+            find_closest_marker() 
+        })
+
+        function find_closest_marker() 
+        {   
+
+            markers.pop()
+            console.log(markers)
+
+            var distances = []
+
+            for (i = 0; i < markers.length; i++) 
+            {   
+                var loc = markers[i].location
+                var res = loc.split(",");
+                var _lstart = parseFloat(res[0])
+                var _lend   = parseFloat(res[1])
+
+                var route_mark =  new google.maps.LatLng(_lstart,_lend)
+                var d = google.maps.geometry.spherical.computeDistanceBetween(route_mark,userPosition);
+                distances[i] = d
+   
+            }
+
+            console.log(min(distances));   
+                             
+        }
     }
 
     function changeMarkerPosition(marker, location)
     {
       var latlng = new google.maps.LatLng(fb_lat, fb_long);
-      console.log(fb_lat + "," + fb_long)
+    //   console.log(fb_lat + "," + fb_long)
       marker.setPosition(latlng);
     } 
+
+    function min(input) {
+     if (toString.call(input) !== "[object Array]")  
+       return false;
+         return Math.min.apply(null, input);
+	}
    
    </script>
    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFqYJJV5e95myYR2wBHxwP-YiO4KnMnE4&callback=initMap"></script>
