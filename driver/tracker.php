@@ -79,7 +79,7 @@ function update(lat, long, id) {
     console.log("Location updated");
 }
 
-var _lat    = 6.0401551     //simulation
+var _lat    = 6.0364908     //simulation
 var _long   = 116.1203991   //simulation
 
 window.setInterval(function() {

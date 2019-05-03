@@ -18,8 +18,54 @@ include '../class/mysql_class.php';
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Admin | View Waypoints </title>
+	<title>User | View Route </title>
 </head>
+<style>
+      #right-panel {
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+
+      #right-panel select, #right-panel input {
+        font-size: 15px;
+      }
+
+      #right-panel select {
+        width: 100%;
+      }
+
+      #right-panel i {
+        font-size: 12px;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+        float: left;
+        width: 70%;
+        height: 100%;
+      }
+      #right-panel {
+        margin: 20px;
+        border-width: 2px;
+        width: 20%;
+        height: 400px;
+        float: left;
+        text-align: left;
+        padding-top: 0;
+      }
+      #directions-panel {
+        margin-top: 10px;
+        background-color: #FFEE77;
+        padding: 10px;
+        overflow: scroll;
+        height: 174px;
+      }
+    </style>
 <script
   src="https://code.jquery.com/jquery-2.2.4.min.js"
   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
@@ -27,17 +73,18 @@ include '../class/mysql_class.php';
 
 <body>
 
-<b>Route Name List</b>
-<br><br>
-    <select class="route_name">
-    <option selected>Pick Routes</option>
-        <?php foreach($routes as $key): ?>
-            <option value="<?php echo $key['route_name'];?>"> <?php echo $key['route_name'];?> </option>
-        <?php endforeach;?>
-    </select>
+    <div id="map"></div>
+    <div id="right-panel">
+        <b>Route Name List</b>
+        <br><br>
+        <select class="route_name">
+        <option selected>Pick Routes</option>
+            <?php foreach($routes as $key): ?>
+                <option value="<?php echo $key['route_name'];?>"> <?php echo $key['route_name'];?> </option>
+            <?php endforeach;?>
+        </select>
+    <div>
 
-    <div id="directions" style="width:200px;height:100px;float:left"></div>
-    <div id="map" style="width:800px;height:500px;"></div>
     <script type="text/javascript" src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
     <script>
 
@@ -129,7 +176,7 @@ include '../class/mysql_class.php';
 
       function initMap() {
 
-          var myLatlng = new google.maps.LatLng(6.0401551, 116.1270994);
+          var myLatlng = new google.maps.LatLng(6.0364908,116.1203991);
           var endLatlng = new google.maps.LatLng(6.037920, 116.125129);
           var directionsDisplay = new google.maps.DirectionsRenderer();
           var directionsService = new google.maps.DirectionsService();
@@ -141,25 +188,11 @@ include '../class/mysql_class.php';
               center: myLatlng
           }
 
-          //FETCH THIS FROM ROUTES [ ROUTES ARRAY] FILTER BY ROUTE NAME
-
-          var waypts = [
-                {location:'6.0364908,116.1203991',stopover:true},
-                {location:'6.033250,116.118115',stopover:true},
-                {location:'6.032428,116.115643',stopover:true},
-                {location:'6.033450,116.113050',stopover:true},
-                {location:'6.035582,116.113230',stopover:true}
-            ]
-
-        //  console.log(waypts)
-
-          calculateAndDisplayRoute(directionsService, directionsDisplay);
-
-          function calculateAndDisplayRoute(directionsService, directionsDisplay,way_array = []) {
+     function calculateAndDisplayRoute(start,end,directionsService, directionsDisplay,way_array = []) {
 
             directionsService.route({
-                origin: "6.0364908,116.1203991",        //FETCH THIS FROM DB ROUTES[ROUTE_START]
-                destination: "6.035582,116.113230",     //FETCH THIS FROM DB ROUTES[ROUTE_END]
+                origin: start,        //FETCH THIS FROM DB ROUTES[ROUTE_START]
+                destination: end,     //FETCH THIS FROM DB ROUTES[ROUTE_END]
                 waypoints: way_array,
                 optimizeWaypoints: true,
                 travelMode: 'DRIVING'
@@ -259,16 +292,20 @@ include '../class/mysql_class.php';
                         stopover: true
                     });      
                     
-                }
+                }   
+                    var route_start = result[0]
+                    var route_end = result.slice(-1).pop()
 
-                    console.log(result);
-                    calculateAndDisplayRoute(directionsService, directionsDisplay,result)
+                    result.shift()
+                    result.pop()
+
+                    calculateAndDisplayRoute(route_start.location,route_end.location,directionsService, directionsDisplay,result)
                 },
                 error: function () {
                     console.log("error");
                 }
             });     
-      });
+        });
 
       }
 
@@ -276,7 +313,7 @@ include '../class/mysql_class.php';
 
           var latlng = new google.maps.LatLng(fb_lat, fb_long);
 
-          console.log(fb_lat + "," + fb_long)
+        //   console.log(fb_lat + "," + fb_long)
 
           marker.setPosition(latlng);
       }

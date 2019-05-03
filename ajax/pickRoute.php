@@ -14,8 +14,6 @@ $route_start  = null;
 $route_start  = null;
 $way_points   = array();
 $counter      = 0;
-$format       = null;
-$stopover     = "true";
 
 foreach($result as $key => $value) {
     $route_string =  $value['route_array'];
@@ -26,11 +24,15 @@ foreach($result as $key => $value) {
 $route_array  = explode(",",$route_string);
 $array_length = count($route_array);
 
+array_push($way_points,$value['route_start']);
+
 while($counter < $array_length){
 
     array_push($way_points,$route_array[$counter]);
     $counter++;
 }
+
+array_push($way_points,$value['route_end']);
 
 $last_point = count($way_points);
 echo json_encode(str_replace("-",",",$way_points));
