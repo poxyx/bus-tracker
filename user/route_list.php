@@ -160,14 +160,6 @@ include '../class/mysql_class.php';
       })
     }
 
-    function startTracking() 
-    {
-        window.setInterval(function()
-        {
-        fetch()
-        }, 2000);
-    }
-
     var counter = -1
 
     function initMap()
@@ -184,6 +176,7 @@ include '../class/mysql_class.php';
       var geocoder = new google.maps.Geocoder;
       var infoWindow = new google.maps.InfoWindow;
       var markers = [];
+      var nearestStop = null;
 
       var mapOptions = {
         zoom: 18,
@@ -197,6 +190,18 @@ include '../class/mysql_class.php';
 
      infoWindow.setPosition(pos);
      infoWindow.setContent('You');
+
+     function startTracking() 
+      {
+        window.setInterval(function()
+        {
+        fetch()
+            if(nearestStop != null ) 
+            {
+                getEstimatedArrival(fb_lat + "," + fb_long, nearestStop)
+            }
+        }, 2000);
+      }
 
       function calculateAndDisplayRoute(start, end, directionsService, directionsDisplay, way_array = [])
       {
@@ -284,7 +289,6 @@ include '../class/mysql_class.php';
       {
         marker.setMap(null);
         changeMarkerPosition(marker, location)
-        //getEstimatedArrival(fb_lat + "," + fb_long, userPosition)
       }, 3000);
 
       $("select.route_name")
@@ -337,9 +341,9 @@ include '../class/mysql_class.php';
         {   
 
             markers.pop()
-            console.log(markers)
 
             var distances = []
+            var lowest    = []
 
             for (i = 0; i < markers.length; i++) 
             {   
@@ -347,14 +351,30 @@ include '../class/mysql_class.php';
                 var res = loc.split(",");
                 var _lstart = parseFloat(res[0])
                 var _lend   = parseFloat(res[1])
-
+                var _lstart_end =  _lstart + "," + _lend
                 var route_mark =  new google.maps.LatLng(_lstart,_lend)
                 var d = google.maps.geometry.spherical.computeDistanceBetween(route_mark,userPosition);
-                distances[i] = d
+
+                distances.push(
+                {
+                  range: d,
+                  location: _lstart_end
+                });
    
             }
 
-            console.log(min(distances));   
+            for (i = 0; i < distances.length; i++) 
+            {  
+                lowest.push(distances[i].range)
+            }
+
+            for (i = 0; i < distances.length; i++) 
+            {  
+                if(distances[i].range == min(lowest))
+                {
+                    console.log(distances[i].location)
+                }
+            }
                              
         }
     }
