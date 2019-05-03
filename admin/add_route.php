@@ -166,6 +166,7 @@ include '../class/mysql_class.php';
           }
         }
 
+        console.log(waypts);
        
         directionsService.route({
           origin: document.getElementById('start').value,
@@ -235,7 +236,8 @@ include '../class/mysql_class.php';
       document.getElementById('submit').addEventListener('click', function() {
                 
         var _name = $('#route_name').val();
-                insertRouteData(waypts,_start,_end,_bus,_name)
+
+                //insertRouteData(waypts,_start,_end,_bus,_name)
 
                 // console.log(waypts) 
                 // console.log(_name)
