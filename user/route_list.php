@@ -198,7 +198,7 @@ include '../class/mysql_class.php';
         fetch()
             if(nearestStop != null ) 
             {
-                getEstimatedArrival(fb_lat + "," + fb_long, nearestStop)
+                //getEstimatedArrival(fb_lat + "," + fb_long, nearestStop)
             }
         }, 2000);
       }
@@ -233,7 +233,7 @@ include '../class/mysql_class.php';
         {
           origins: [start],
           destinations: [end],
-          travelMode: 'WALKING',
+          travelMode: 'DRIVING',
           unitSystem: google.maps.UnitSystem.METRIC,
           avoidHighways: false,
           avoidTolls: false
@@ -340,6 +340,7 @@ include '../class/mysql_class.php';
         function find_closest_marker() 
         {   
 
+            markers.shift()
             markers.pop()
 
             var distances = []
@@ -372,7 +373,24 @@ include '../class/mysql_class.php';
             {  
                 if(distances[i].range == min(lowest))
                 {
-                    console.log(distances[i].location)
+                    nearestStop = distances[i].location
+                    console.log(nearestStop)
+                    var ares = nearestStop.split(",");
+                    var _a = parseFloat(ares[0])
+                    var _b   = parseFloat(ares[1])
+
+                    var test = new google.maps.LatLng(_a,_b)
+                        
+                    var nearMarker = new google.maps.Marker(
+                        {
+                            position: test,
+                            icon: '../happy.PNG',
+                            animation: google.maps.Animation.BOUNCE
+                        });
+
+                        map.setZoom(20);
+                        map.panTo(test);
+                        nearMarker.setMap(map);
                 }
             }
                              
