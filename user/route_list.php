@@ -8,8 +8,6 @@ include '../class/mysql_class.php';
 
     $routes  = $helper->select($sql);
 
-    $bus_id = "-LdqVbSsr3mLpLYnZTpH";
-
 ?>
 
 <!DOCTYPE HTML>
@@ -92,7 +90,7 @@ include '../class/mysql_class.php';
     <script type="text/javascript" src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
     <script>
       // Initialize Firebase
-      var config = {
+    var config = {
         apiKey: "AIzaSyCNtEKwrOSmfi_wn21WQr0WS7Yl-TK_isk",
         authDomain: "driver-tracker-5c786.firebaseapp.com",
         databaseURL: "https://driver-tracker-5c786.firebaseio.com",
@@ -104,42 +102,11 @@ include '../class/mysql_class.php';
     firebase.initializeApp(config);
     const database = firebase.database()
     const ref = database.ref('location');
-    const bus_id = "-Le-vusqUnBPcmDBp1iu"
-    const plate = "SAB7894"
-
-    function insert(lat, long, id)
-    {
-      const result = ref.push(
-      {
-        latitude: lat,
-        longitude: long,
-        id: id
-      })
-      // console.log(result);
-    }
-
-    function update(lat, long, id)
-    {
-      ref.update(
-      {
-        "<?php echo $bus_id;?>":
-        {
-          latitude: lat,
-          longitude: long,
-          id: id
-        }
-      })
-      console.log("updated" + key);
-    }
-
-    function deleteData(key)
-    {
-      ref.update(
-      {
-        key: null
-      })
-    }
-
+    var routes_driver_plate = [];
+    var routes_driver_name = [];
+    var routes_driver_key = [];
+    var driver_current_lat = [];
+    var driver_current_long = [];
     var count = 0;
     var fb_lat = 0;
     var fb_long = 0;
@@ -147,19 +114,34 @@ include '../class/mysql_class.php';
     function fetch()
     {
       count++;
+
+      driver_current_lat = [];
+      driver_current_long = [];
+
+      for (var i = 0; i < routes_driver_key.length; i++) {
+
+        getLoc(routes_driver_key[i])
+
+      }
+    }
+
+    function getLoc(ids) {
+
       ref.once('value', function(data)
-      {
-        let objKey = Object.keys(data.val());
-        for (obj in objKey)
-        {
-          let key = objKey[obj];
-          if (key == bus_id)
-          {
-            fb_lat = data.val()[key].latitude;
-            fb_long = data.val()[key].longitude
-          }
-        }
-      })
+            {
+              let objKey = Object.keys(data.val());
+              for (obj in objKey)
+              {
+                let key = objKey[obj];
+                if (key == ids)
+                {
+
+                  driver_current_lat.push(data.val()[key].latitude);
+                  driver_current_long.push(data.val()[key].longitude);
+
+                }
+              }
+          })
     }
 
     var counter = -1
@@ -179,9 +161,6 @@ include '../class/mysql_class.php';
       var infoWindow = new google.maps.InfoWindow;
       var markers = [];
       var nearestStop = null;
-      var routes_driver_plate = [];
-      var routes_driver_name = [];
-      var routes_driver_key = [];
 
       var mapOptions = {
         zoom: 18,
@@ -201,10 +180,7 @@ include '../class/mysql_class.php';
         window.setInterval(function()
         {
         fetch()
-            if(nearestStop != null ) 
-            {   
-                //getEstimatedArrival(fb_lat + "," + fb_long, nearestStop)
-            }
+
         }, 2000);
       }
 
@@ -277,12 +253,6 @@ include '../class/mysql_class.php';
 
       directionsDisplay.setMap(map);
 
-      var marker = new google.maps.Marker(
-      {
-        position: busPosition,
-        icon: '../bus_color.PNG'
-      });
-
       var userMarker = new google.maps.Marker(
       {
         position: userPosition,
@@ -294,20 +264,17 @@ include '../class/mysql_class.php';
 
       window.setInterval(function()
       {
-        marker.setMap(map);
-      }, 1000);
-
-      window.setInterval(function()
-      {
-        marker.setMap(null);
-        changeMarkerPosition(marker, location)
-      }, 3000);
+          insertBusMarkerPosition()
+      }, 5000);
 
       $("select.route_name")
         .on('change', function()
         {
 
           var target_route = this.value
+          routes_driver_plate = [];
+          routes_driver_name = [];
+          routes_driver_key = [];
 
           $.ajax(
           {
@@ -355,8 +322,6 @@ include '../class/mysql_class.php';
                             }
                            
                           }
-
-                          console.log(routes_driver_key)
                       },
                       error: function()
                       {
@@ -382,7 +347,7 @@ include '../class/mysql_class.php';
 
               markers = result;
               
-                // startTracking()
+                startTracking()
                 calculateAndDisplayRoute(route_start.location, route_end.location, directionsService, directionsDisplay, result)
 
             },
@@ -448,14 +413,46 @@ include '../class/mysql_class.php';
             }
                              
         }
-    }
 
-    function changeMarkerPosition(marker, location)
-    {
-      var latlng = new google.maps.LatLng(fb_lat, fb_long);
-    //   console.log(fb_lat + "," + fb_long)
-      marker.setPosition(latlng);
-    } 
+        var placeholder = [];
+
+        function insertBusMarkerPosition()
+        {
+            
+            // var latlng = new google.maps.LatLng(driver_current_lat[0], driver_current_long[0]);
+            // marker.setPosition(latlng);
+
+          removeMarkers()
+
+          for (var i = 0; i < driver_current_lat.length; i++)
+            {
+              addMarker(new google.maps.LatLng(driver_current_lat[i], driver_current_long[i]))
+              if(nearestStop != null ) 
+              {   
+                  getEstimatedArrival(driver_current_lat[i] + "," +  driver_current_long[i], nearestStop)
+              }
+            }
+
+        } 
+
+        function addMarker(location) {
+            mark = new google.maps.Marker({
+                position: location,
+                icon: '../bus_color.PNG',
+                map: map
+            });
+
+            placeholder.push(mark);
+        }
+
+        function removeMarkers() {
+
+            for (var i = 0; i < placeholder.length; i++) {
+              placeholder[i].setMap(null);
+            }
+        }
+
+    }
 
     function min(input) {
      if (toString.call(input) !== "[object Array]")  

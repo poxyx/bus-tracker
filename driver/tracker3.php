@@ -19,7 +19,7 @@ include '../class/mysql_class.php';
 
     // $routes  = $helper->select($sql);
 
-    $bus_id = "-Le0BsKqr3nmN9OYvxMg";
+    $bus_id = "-Le0DlgZ9ttLYLk5RwjP";
 
 ?>
 
@@ -54,8 +54,8 @@ const ref       = database.ref('location');
 
 const refresh   = 3000;
 
-const bus_id    = "-Le0BsKqr3nmN9OYvxMg"  //FETCH THIS FROM FIREBASE WHERE ID = DRIVER PLATE
-const plate     = "ZAC8594"               //FETCH FROM DATABASE
+const bus_id    = "-Le0DlgZ9ttLYLk5RwjP"  //FETCH THIS FROM FIREBASE WHERE ID = DRIVER PLATE
+const plate     = "SAB7777"               //FETCH FROM DATABASE
 
 function showPosition(position) {
 
@@ -84,8 +84,8 @@ var _long   = 116.1203991   //simulation
 
 window.setInterval(function() {
 
-    _lat    = _lat + 0.00050    //simulation
-    _long   = _long + 0.00050   //simulation
+    _lat    = _lat + 0.00090    //simulation
+    _long   = _long + 0.00090   //simulation
 
     update(_lat.toFixed(7), _long.toFixed(7), plate)
 

@@ -19,7 +19,7 @@ include '../class/mysql_class.php';
 
     // $routes  = $helper->select($sql);
 
-    $bus_id = "-Le-vusqUnBPcmDBp1iu";
+    $bus_id = "-Le0BoL4I4YA17Ir4D2L";
 
 ?>
 
@@ -54,8 +54,8 @@ const ref       = database.ref('location');
 
 const refresh   = 3000;
 
-const bus_id    = "-LdqVbSsr3mLpLYnZTpH"  //FETCH THIS FROM FIREBASE WHERE ID = DRIVER PLATE
-const plate     = "SAB7894"               //FETCH FROM DATABASE
+const bus_id    = "-Le0BoL4I4YA17Ir4D2L"  //FETCH THIS FROM FIREBASE WHERE ID = DRIVER PLATE
+const plate     = "SA84930"               //FETCH FROM DATABASE
 
 function showPosition(position) {
 
