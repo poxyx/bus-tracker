@@ -5,11 +5,8 @@ include '../class/mysql_class.php';
 
     $helper = new sql();
 
-    $sql   = "SELECT * FROM bus";
-
     $points = "SELECT * FROM waypoints";
 
-    $bus   = $helper->select($sql);
     $point = $helper->select($points);
 
 ?>
@@ -76,15 +73,6 @@ include '../class/mysql_class.php';
     <div id="right-panel">
     <div>
 
-    <b>Bus list</b>
-    <select class="bus_id">
-    <option selected>Bus to Assign</option>
-        <?php foreach($bus as $key): ?>
-            <option value="<?php echo $key['plate_number'];?>"> <?php echo $key['plate_number'];?> </option>
-        <?php endforeach;?>
-    </select>
-
-
     <b>Start:</b>
     <select class="start" id="start">
     <option selected>Starting Location</option>
@@ -112,12 +100,13 @@ include '../class/mysql_class.php';
         <?php endforeach;?>
     </select>
     <br>
-
     <b>Route Name</b><br>
         <input type="text" id="route_name" name="route_name" style="width:100%">
     <br>
+    <b>Route Codename</b><br>
+        <input type="text" id="route_codename" name="route_name" style="width:100%">
     <br>
-
+    <br>
     <center>
       <button id="preview">Preview Route</button>
       <button id="submit">Assign Route</button>
@@ -215,15 +204,16 @@ include '../class/mysql_class.php';
             //    console.log(_end);
       });
 
-      function insertRouteData(waypoint,start,end,bus_id,stop_name) {
+      function insertRouteData(waypoint,start,end,stop_name,codename) {
 
         $.ajax({
-            url: '../ajax/assignRoute.php',
+            url: '../ajax/createRoute.php',
             type: 'POST',
-            data: jQuery.param({ stop: waypoint, start : start,end : end,bus_id : bus_id , name : stop_name}) ,
+            data: jQuery.param({ stop: waypoint, start : start,end : end, name : stop_name , codename : codename }) ,
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             success: function (response) {
-                alert(response);
+                // alert(response);
+                console.log(response)
                 location.reload();
             },
             error: function () {
@@ -236,8 +226,9 @@ include '../class/mysql_class.php';
       document.getElementById('submit').addEventListener('click', function() {
                 
         var _name = $('#route_name').val();
+        var _code = $('#route_codename').val();
 
-                //insertRouteData(waypts,_start,_end,_bus,_name)
+                insertRouteData(waypts,_start,_end,_name,_code)
 
                 // console.log(waypts) 
                 // console.log(_name)

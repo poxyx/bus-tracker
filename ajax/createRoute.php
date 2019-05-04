@@ -13,7 +13,7 @@ foreach($_POST['stop'] as $key) {
 
 $helper = new sql();
 
-$sql = "INSERT INTO routes (bus_id,route_array,route_name,route_start,route_end) VALUES ("."'".@$_POST['bus_id']."'".",
+$sql = "INSERT INTO routes (codename,route_array,route_name,route_start,route_end) VALUES ("."'".@$_POST['codename']."'".",
             "."'".substr($route_array,1)."'".",
             "."'".str_replace(' ', '',@$_POST['name'])."'".",
             "."'".str_replace(' ', '',@$_POST['start'])."'".",
