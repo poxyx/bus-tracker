@@ -200,7 +200,7 @@ include '../class/mysql_class.php';
         fetch()
             if(nearestStop != null ) 
             {   
-                getEstimatedArrival(fb_lat + "," + fb_long, nearestStop)
+                // getEstimatedArrival(fb_lat + "," + fb_long, nearestStop)
             }
         }, 2000);
       }
