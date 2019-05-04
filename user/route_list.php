@@ -108,8 +108,6 @@ include '../class/mysql_class.php';
     var driver_current_lat = [];
     var driver_current_long = [];
     var count = 0;
-    var fb_lat = 0;
-    var fb_long = 0;
 
     function fetch()
     {
@@ -181,7 +179,7 @@ include '../class/mysql_class.php';
         {
         fetch()
 
-        }, 2000);
+        }, 3000);
       }
 
       function calculateAndDisplayRoute(start, end, directionsService, directionsDisplay, way_array = [])
@@ -208,6 +206,8 @@ include '../class/mysql_class.php';
 
       var service = new google.maps.DistanceMatrixService;
 
+      var timing    = []
+
       function getEstimatedArrival(start, end)
       {
         service.getDistanceMatrix(
@@ -227,23 +227,28 @@ include '../class/mysql_class.php';
           else
           {
             var originList = response.originAddresses;
-            var estimated = '';
+            var estimated = "";
+
             for (var i = 0; i < originList.length; i++)
             {
               var results = response.rows[i].elements;
               for (var j = 0; j < results.length; j++)
               {
                 estimated = results[j].duration.text;
+                var minutes = estimated.split(" ")
+                timing.push(minutes[0])
               }
             }
             // console.log("Estimated arrival time : " + estimated);
-            $("#estimated").html("Estimated arrival time : " + estimated);
+            var timer = estimated.split(" ")
+
+            $("#estimated").html("Next bus estimated arrival time : " + min(timing) );
+            
             // console.log(estimated)
-           var timer = estimated.split(" ")
                 console.log(timer[0])
                 if(timer[0] == 1 ) {
                     // alert("Your bus is almost here")
-                }
+              }
           }
         });
       }
@@ -265,7 +270,7 @@ include '../class/mysql_class.php';
       window.setInterval(function()
       {
           insertBusMarkerPosition()
-      }, 5000);
+      }, 2000);
 
       $("select.route_name")
         .on('change', function()
