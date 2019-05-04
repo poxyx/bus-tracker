@@ -6,7 +6,7 @@ $helper = new sql();
 
 $route = "'".@$_POST['route_name']."'";
 
-$sql = "SELECT * FROM routes WHERE route_name = $route ";
+$sql = "SELECT * FROM routes WHERE codename = $route ";
     
 $result = $helper->select($sql);
 $route_string = null;

@@ -80,7 +80,7 @@ include '../class/mysql_class.php';
         <center><select class="route_name">
         <option selected disabled>Pick Routes</option>
             <?php foreach($routes as $key): ?>
-                <option value="<?php echo $key['route_name'];?>"> <?php echo $key['route_name'];?> </option>
+                <option value="<?php echo $key['codename'];?>"> <?php echo $key['route_name'];?> </option>
             <?php endforeach;?>
         </select></center>
         <br>
@@ -104,7 +104,7 @@ include '../class/mysql_class.php';
     firebase.initializeApp(config);
     const database = firebase.database()
     const ref = database.ref('location');
-    const bus_id = "-LdqVbSsr3mLpLYnZTpH"
+    const bus_id = "-Le-vusqUnBPcmDBp1iu"
     const plate = "SAB7894"
 
     function insert(lat, long, id)
@@ -179,6 +179,9 @@ include '../class/mysql_class.php';
       var infoWindow = new google.maps.InfoWindow;
       var markers = [];
       var nearestStop = null;
+      var routes_driver_plate = [];
+      var routes_driver_name = [];
+      var routes_driver_key = [];
 
       var mapOptions = {
         zoom: 18,
@@ -200,7 +203,7 @@ include '../class/mysql_class.php';
         fetch()
             if(nearestStop != null ) 
             {   
-                // getEstimatedArrival(fb_lat + "," + fb_long, nearestStop)
+                //getEstimatedArrival(fb_lat + "," + fb_long, nearestStop)
             }
         }, 2000);
       }
@@ -303,6 +306,9 @@ include '../class/mysql_class.php';
       $("select.route_name")
         .on('change', function()
         {
+
+          var target_route = this.value
+
           $.ajax(
           {
             url: '../ajax/pickRoute.php',
@@ -314,6 +320,50 @@ include '../class/mysql_class.php';
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             success: function(json_data)
             {
+              $.ajax(
+                {
+                      url: '../ajax/pickBus.php',
+                      type: 'POST',
+                      data: jQuery.param(
+                      {
+                        route_name: target_route
+                      }),
+                      contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                      success: function(bus_data)
+                      {
+                          var route_driver = [];
+                          var json_driver  = JSON.parse(bus_data)
+   
+                          for (var i = 0; i < json_driver.length; i++)
+                          {
+                            route_driver.push(
+                              {
+                                  driver_name: json_driver[i],
+                                  plate_number: json_driver[i + 2],
+                                  firebase_id: json_driver[i + 1]
+                              });
+                          }
+
+                          for (var i = 0; i < route_driver.length; i++)
+                          {
+
+                            if((i % 3) == 0 ) 
+                            {                              
+                              routes_driver_name.push(route_driver[i].driver_name)
+                              routes_driver_plate.push(route_driver[i].plate_number)
+                              routes_driver_key.push(route_driver[i].firebase_id)
+                            }
+                           
+                          }
+
+                          console.log(routes_driver_key)
+                      },
+                      error: function()
+                      {
+                        console.log("error");
+                  }
+              });
+
               var result = [];
               var json_data = JSON.parse(json_data);
               for (var i = 0; i < json_data.length; i++)
@@ -331,8 +381,10 @@ include '../class/mysql_class.php';
               result.pop()
 
               markers = result;
-              startTracking()
-              calculateAndDisplayRoute(route_start.location, route_end.location, directionsService, directionsDisplay, result)
+              
+                // startTracking()
+                calculateAndDisplayRoute(route_start.location, route_end.location, directionsService, directionsDisplay, result)
+
             },
             error: function()
             {
@@ -388,18 +440,10 @@ include '../class/mysql_class.php';
                     var _a = parseFloat(ares[0])
                     var _b   = parseFloat(ares[1])
 
-                    var test = new google.maps.LatLng(_a,_b)
+                    var target = new google.maps.LatLng(_a,_b)
                         
-                    // var nearMarker = new google.maps.Marker(
-                    //     {
-                    //         position: test,
-                    //         icon: '../happy.PNG',
-                    //         animation: google.maps.Animation.BOUNCE
-                    //     });
-
-                        map.setZoom(19);
-                        map.panTo(test);
-                        // nearMarker.setMap(map);
+                    map.setZoom(19);
+                    map.panTo(target);
                 }
             }
                              

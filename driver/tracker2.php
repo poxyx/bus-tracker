@@ -19,7 +19,7 @@ include '../class/mysql_class.php';
 
     // $routes  = $helper->select($sql);
 
-    $bus_id = "-Le-vusqUnBPcmDBp1iu";
+    $bus_id = "-Le-w6KOUJ5lEqvOO4nO";
 
 ?>
 
@@ -84,8 +84,8 @@ var _long   = 116.1203991   //simulation
 
 window.setInterval(function() {
 
-    _lat    = _lat + 0.00010    //simulation
-    _long   = _long + 0.00010   //simulation
+    _lat    = _lat + 0.00050    //simulation
+    _long   = _long + 0.00050   //simulation
 
     update(_lat.toFixed(7), _long.toFixed(7), plate)
 
