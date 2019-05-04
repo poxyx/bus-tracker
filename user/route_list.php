@@ -77,14 +77,16 @@ include '../class/mysql_class.php';
     <div id="right-panel">
         <b>Route Name List</b>
         <br><br>
-        <select class="route_name">
-        <option selected>Pick Routes</option>
+        <center><select class="route_name">
+        <option selected disabled>Pick Routes</option>
             <?php foreach($routes as $key): ?>
                 <option value="<?php echo $key['route_name'];?>"> <?php echo $key['route_name'];?> </option>
             <?php endforeach;?>
-        </select>
-        <br><br>
-        <button id="nearest">FIND NEARBY STOP</button>
+        </select></center>
+        <br>
+        <center><button id="nearest">FIND NEARBY STOP</button></center>
+        <br>
+        <center><div id="estimated"></div></center>
     <div>
 
     <script type="text/javascript" src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
@@ -197,8 +199,8 @@ include '../class/mysql_class.php';
         {
         fetch()
             if(nearestStop != null ) 
-            {
-                //getEstimatedArrival(fb_lat + "," + fb_long, nearestStop)
+            {   
+                getEstimatedArrival(fb_lat + "," + fb_long, nearestStop)
             }
         }, 2000);
       }
@@ -255,7 +257,14 @@ include '../class/mysql_class.php';
                 estimated = results[j].duration.text;
               }
             }
-            console.log("Estimated arrival time : " + estimated);
+            // console.log("Estimated arrival time : " + estimated);
+            $("#estimated").html("Estimated arrival time : " + estimated);
+            // console.log(estimated)
+           var timer = estimated.split(" ")
+                console.log(timer[0])
+                if(timer[0] == 1 ) {
+                    // alert("Your bus is almost here")
+                }
           }
         });
       }
@@ -381,16 +390,16 @@ include '../class/mysql_class.php';
 
                     var test = new google.maps.LatLng(_a,_b)
                         
-                    var nearMarker = new google.maps.Marker(
-                        {
-                            position: test,
-                            icon: '../happy.PNG',
-                            animation: google.maps.Animation.BOUNCE
-                        });
+                    // var nearMarker = new google.maps.Marker(
+                    //     {
+                    //         position: test,
+                    //         icon: '../happy.PNG',
+                    //         animation: google.maps.Animation.BOUNCE
+                    //     });
 
-                        map.setZoom(20);
+                        map.setZoom(19);
                         map.panTo(test);
-                        nearMarker.setMap(map);
+                        // nearMarker.setMap(map);
                 }
             }
                              
