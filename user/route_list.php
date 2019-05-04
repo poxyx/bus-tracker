@@ -147,7 +147,7 @@ include '../class/mysql_class.php';
     function initMap()
     {
       
-      var userPosition = new google.maps.LatLng(6.040731,116.12391); //GET FROM HTML5 GELOCATION
+      var userPosition = new google.maps.LatLng(6.050227,116.131466); //GET FROM HTML5 GELOCATION
         
       var busPosition = new google.maps.LatLng(6.0364908, 116.1203991); //GET FROM FIREBASE
 
@@ -247,7 +247,7 @@ include '../class/mysql_class.php';
             // console.log(estimated)
                 console.log(timer[0])
                 if(timer[0] == 1 ) {
-                    // alert("Your bus is almost here")
+                  alert("Your bus is almost here")
               }
           }
         });
@@ -435,6 +435,7 @@ include '../class/mysql_class.php';
               if(nearestStop != null ) 
               {   
                   getEstimatedArrival(driver_current_lat[i] + "," +  driver_current_long[i], nearestStop)
+                  timing = [];
               }
             }
 
