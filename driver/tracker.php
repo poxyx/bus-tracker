@@ -1,25 +1,8 @@
-<!--
-
-AFTER DRIVER LOGIN
-GET DRIVER BUS PLATE FROM DATABASE
-
-GET COLLECTION KEY FROM FIREBASE
-USING BUS PLATE NUMBER
-
--->
-
-
 <?php
 
 include '../class/mysql_class.php';
 
     $helper  = new sql();
-
-    // $sql     = "SELECT * FROM routes";
-
-    // $routes  = $helper->select($sql);
-
-    $bus_id = "-Le0BoL4I4YA17Ir4D2L";
 
 ?>
 
@@ -31,44 +14,44 @@ include '../class/mysql_class.php';
     
 </head>
     <body>
+        <button onclick="goBack()">STOP TRACKING</button>
     </body>
 </html>
+
+
+<script>
+function goBack() 
+{
+     window.history.back();
+}
+</script>
 
 
 <script type="text/javascript" src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
 <script>
 // Initialize Firebase
-var config = {
-    apiKey: "AIzaSyCNtEKwrOSmfi_wn21WQr0WS7Yl-TK_isk",
-    authDomain: "driver-tracker-5c786.firebaseapp.com",
-    databaseURL: "https://driver-tracker-5c786.firebaseio.com",
-    projectId: "driver-tracker-5c786",
-    storageBucket: "driver-tracker-5c786.appspot.com",
-    messagingSenderId: "585118258922"
-};
+var config = <?php echo $firebase_config;?>
+var mode   = <?php echo $mode_test;?>
 
 firebase.initializeApp(config);
 
 const database  = firebase.database()
 const ref       = database.ref('location');
-
-const refresh   = 3000;
-
-const bus_id    = "-Le0BoL4I4YA17Ir4D2L"  //FETCH THIS FROM FIREBASE WHERE ID = DRIVER PLATE
-const plate     = "SA84930"               //FETCH FROM DATABASE
+const refresh   = <?php echo  $refresh;?>;
+const bus_id    = <?php echo  "'".$_GET['key']."'";?>  
 
 function showPosition(position) {
 
 var lat  =  position.coords.latitude;
 var long =  position.coords.longitude;
 
-    update(lat.toFixed(7),long.toFixed(7), plate)
+    update(lat.toFixed(7),long.toFixed(7), <?php echo  "'".$_GET['plate']."'";?>)
 }
 
 function update(lat, long, id) {
 
     ref.update({
-        "<?php echo $bus_id;?>": {
+        "<?php echo $_GET['key'];?>": {
 
             latitude: lat,
             longitude: long,
@@ -79,29 +62,34 @@ function update(lat, long, id) {
     console.log("Location updated");
 }
 
-var _lat    = 6.0364908     //simulation
-var _long   = 116.1203991   //simulation
+if(mode) {
 
-window.setInterval(function() {
+        var _lat    = <?php echo $test_lat;?>     //simulation
+        var _long   = <?php echo $test_lng;?>   //simulation
 
-    _lat    = _lat + 0.00010    //simulation
-    _long   = _long + 0.00010   //simulation
+        window.setInterval(function() {
 
-    update(_lat.toFixed(7), _long.toFixed(7), plate)
+            _lat    = _lat + 0.00010    //simulation
+            _long   = _long + 0.00010   //simulation
 
-}, refresh);
+            update(_lat.toFixed(7), _long.toFixed(7), <?php echo  "'".$_GET['plate']."'";?>)
 
-/*
-window.setInterval(function() {
+        }, refresh);
 
-if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition);
-} else { 
-    alert("Geolocation is not supported by this browser.");
+} else {
+
+
+        window.setInterval(function() {
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else { 
+            alert("Geolocation is not supported by this browser.");
+        }
+
+        }, refresh);
+
 }
-
-}, refresh);
-*/
 
 </script>
 

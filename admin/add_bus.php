@@ -61,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             <option selected  value="ahmad">Ahmed</option>
             <option selected  value="marvin">Marvin</option>
             <option selected  value="gillaleo">Gillaleo</option>
+            <option selected  value="gillaleo">Tumatik</option></option>
         </select>
         <hr>
         <input type="hidden" name="fb_id" id="fb_id">
@@ -78,14 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 <script>
 
     // Initialize Firebase
-    var config = {
-        apiKey: "AIzaSyCNtEKwrOSmfi_wn21WQr0WS7Yl-TK_isk",
-        authDomain: "driver-tracker-5c786.firebaseapp.com",
-        databaseURL: "https://driver-tracker-5c786.firebaseio.com",
-        projectId: "driver-tracker-5c786",
-        storageBucket: "driver-tracker-5c786.appspot.com",
-        messagingSenderId: "585118258922"
-    };
+    var config = <?php echo $firebase_config;?>
 
     firebase.initializeApp(config);
     const database = firebase.database()
@@ -101,7 +95,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             id: id
         })
             
-        // console.log(result);
     }
 
     function fetch()
@@ -117,7 +110,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
           if (data.val()[key].id == $('#plate_number').val())
           {
             $('#fb_id').val(key)
-                // console.log($('#fb_id').val())
           }
         }
       })
