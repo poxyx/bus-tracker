@@ -95,6 +95,7 @@ if(!isset($_SESSION['user_id']) || !isset($_SESSION['logged_in'])){
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Task:</h6>
             <a class="collapse-item" href="add_driver.php">Add Driver</a>
+            <a class="collapse-item" href="driver_key.php">Driver Tracking Key</a>
           </div>
         </div>
       </li>
@@ -154,7 +155,7 @@ if(!isset($_SESSION['user_id']) || !isset($_SESSION['logged_in'])){
     <div id="content-wrapper" class="d-flex flex-column">
 
       <!-- Main Content -->
-      <div id="content" style="background-color:red;">
+      <div id="content">
 
         <!-- Topbar -->
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
