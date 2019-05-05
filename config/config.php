@@ -26,3 +26,5 @@ $GLOBALS['test_lng'] = 116.1203991;
 
 //REFRESH RATE IN MILISECONDS
 $GLOBALS['refresh']  = 2000;
+
+$GLOBALS['url']  = "http://localhost:8080/bus-tracker/admin/";

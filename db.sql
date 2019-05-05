@@ -21,27 +21,48 @@ USE `bus-tracker`;
 DROP TABLE IF EXISTS `bus`;
 
 CREATE TABLE `bus` (
+  `driver` varchar(100) NOT NULL,
+  `route_codename` varchar(50) NOT NULL,
   `seat_total` int(11) DEFAULT NULL,
-  `driver_array` text,
   `plate_number` varchar(50) DEFAULT NULL,
-  `is_full` tinyint(1) DEFAULT '0'
+  `is_full` tinyint(1) DEFAULT '0',
+  `firebase_id` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `bus` */
 
-insert  into `bus`(`seat_total`,`driver_array`,`plate_number`,`is_full`) values 
-(100,NULL,'SA84930',0),
-(100,NULL,'SM5678',0),
-(100,NULL,'SA7779',0),
-(100,NULL,'SM3468',0),
-(100,NULL,'KL8909',0);
+insert  into `bus`(`driver`,`route_codename`,`seat_total`,`plate_number`,`is_full`,`firebase_id`) values 
+('john','T5',100,'SA84930',0,'-Le0BoL4I4YA17Ir4D2L'),
+('ahmad','T5',100,'ZAC8594',0,'-Le0BsKqr3nmN9OYvxMg'),
+('marvin','T3',100,'SA7779',0,'-Le0ByNu6fHauQR_ELfb'),
+('gillaleo','T5',100,'SAB7777',0,'-Le0DlgZ9ttLYLk5RwjP'),
+('gillaleo','T5',100,'XX8979',0,'-Le5Jh5-3-8LNKPdjrQc');
+
+/*Table structure for table `driver` */
+
+DROP TABLE IF EXISTS `driver`;
+
+CREATE TABLE `driver` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+/*Data for the table `driver` */
+
+insert  into `driver`(`id`,`name`) values 
+(2,'JOHN'),
+(3,'AHMAD'),
+(4,'MARVIN'),
+(5,'GILALEO'),
+(6,'ZULKARNAIN');
 
 /*Table structure for table `routes` */
 
 DROP TABLE IF EXISTS `routes`;
 
 CREATE TABLE `routes` (
-  `bus_id` varchar(50) NOT NULL,
+  `codename` varchar(50) NOT NULL,
   `route_array` text NOT NULL,
   `route_name` varchar(50) NOT NULL,
   `route_start` varchar(50) NOT NULL,
@@ -50,10 +71,21 @@ CREATE TABLE `routes` (
 
 /*Data for the table `routes` */
 
-insert  into `routes`(`bus_id`,`route_array`,`route_name`,`route_start`,`route_end`) values 
-('KL8909','6.033250-116.118115,6.032428-116.115643','KOLEJ KEDIAMAN TUN MUSTAPHA','6.0364908,116.1203991','6.042159,116.125114'),
-('SA7779','6.0364908-116.1203991,6.033250-116.118115,6.032428-116.115643,6.033450-116.113050,6.035582-116.113230,6.035872-116.116665,6.041379-116.123201,6.045237-116.128109,6.050041-116.133079,6.045205-116.130234,6.045163-116.128441,6.040422-116.124328,6.042159-116.125114','KOLEJ KEDIAMAN EXCELLENT','6.040422,116.124328','6.042159,116.125114'),
-('SM5678','6.0364908-116.1203991,6.033250-116.118115,6.032428-116.115643,6.033450-116.113050,6.035582-116.113230','SHORT','6.0364908,116.1203991','6.040422,116.124328');
+insert  into `routes`(`codename`,`route_array`,`route_name`,`route_start`,`route_end`) values 
+('T3','6.033250-116.118115,6.032428-116.115643,6.033450-116.113050,6.035582-116.113230,6.035872-116.116665,6.041379-116.123201,6.045237-116.128109,6.050041-116.133079,6.045205-116.130234,6.045163-116.128441,6.040422-116.124328','TESTING3','6.033250,116.118115','6.033450,116.113050'),
+('T5','6.0364908-116.1203991,6.033250-116.118115,6.032428-116.115643,6.033450-116.113050,6.035582-116.113230,6.035872-116.116665,6.041379-116.123201,6.045237-116.128109,6.050041-116.133079,6.045205-116.130234,6.045163-116.128441,6.040422-116.124328,6.042159-116.125114','TESTING5','6.040422,116.124328','6.042159,116.125114');
+
+/*Table structure for table `user` */
+
+DROP TABLE IF EXISTS `user`;
+
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `user` */
 
 /*Table structure for table `waypoints` */
 

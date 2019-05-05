@@ -32,6 +32,14 @@ class sql
         echo $this->conn->query($sql) ? "New record created successfully" : "Error: " . $sql . "<br>" . $this->conn->error;      
     }
 
+    public function update($sql)
+    {
+       $result = $this->conn->query($sql);
+        
+       return $result;      
+
+    }
+
    function __destruct()
    {
         $this->conn->close();
