@@ -1,30 +1,41 @@
 <?php
 
-include '../class/mysql_class.php';
+session_start();
 
-    $helper  = new sql();
+include '../class/mysql_class.php';
+include 'include/header.php';
+
+/**
+ * Check if the user is logged in.
+ */
+if(!isset($_SESSION['user_key']) || !isset($_SESSION['logged_in'])){
+    //User not logged in. Redirect them back to the login.php page.
+    header('Location: login.php');
+    exit;
+}
+
 
 ?>
 
-<!DOCTYPE HTML>
-<html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Driver | Location Tracker </title>
-    
-</head>
-    <body>
-        <button onclick="goBack()">STOP TRACKING</button>
+    <div class="container">
+    <br><br>
+        <div class="row">
+
+            <div class="center input-field col s12">
+            <br><br>
+            <a class="btn-floating btn-large pulse green accent-3" href="#">
+                <i class="material-icons">navigation</i></a>
+            </div>
+            <div class="center input-field col s12">         
+            <br><br><br>
+                <a href="logout.php" class="btn btn-large blue accent-2">STOP TRACKING</a>
+            </div>
+        </div>
+        
+    </div>
+
     </body>
 </html>
-
-
-<script>
-function goBack() 
-{
-     window.history.back();
-}
-</script>
 
 
 <script type="text/javascript" src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>

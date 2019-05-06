@@ -82,7 +82,7 @@ if(!isset($_SESSION['user_id']) || !isset($_SESSION['logged_in'])){
 
       <!-- Heading -->
       <div class="sidebar-heading">
-        Interface
+        Menu
       </div>
 
       <!-- Nav Item - Pages Collapse Menu -->
@@ -222,7 +222,7 @@ if(!isset($_SESSION['user_id']) || !isset($_SESSION['logged_in'])){
                   <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                   Activity Log
                 </a> -->
-                <div class="dropdown-divider"></div>
+                <!-- <div class="dropdown-divider"></div> -->
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout

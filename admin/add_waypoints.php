@@ -69,7 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 12,
-          center: origin
+          center: origin,
+          draggableCursor:'crosshair'
         });
         var clickHandler = new ClickEventHandler(map, origin);
       }

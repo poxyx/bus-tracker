@@ -144,7 +144,7 @@ if(!mode) {
           var timer = estimated.split(" ");
 
           $("#estimated").html(
-            "Next bus estimated arrival time : " + min(timing)
+            min(timing)
           );
 
           if (timer[0] == 1) {
@@ -176,6 +176,8 @@ if(!mode) {
     routes_driver_plate = [];
     routes_driver_name = [];
     routes_driver_key = [];
+
+    $("#bus_route_name").html(this.value)
 
     $.ajax({
       url: "../ajax/pickRoute.php",
