@@ -6,7 +6,7 @@ class sql
 {
     private $servername = "localhost";
     private $username = "root";
-    private $password = "root";
+    private $password = "";
     private $dbname = "bus-tracker";
     private $conn;
     

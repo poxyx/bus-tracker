@@ -2,12 +2,12 @@
 
 //GOOGLE MAP API KEY
 
-$GLOBALS['api_key'] = "AIzaSyCFqYJJV5e95myYR2wBHxwP-YiO4KnMnE4";
+$GLOBALS['api_key'] = "";
 
 //FIREBASE CONFIG
 
 $GLOBALS['firebase_config'] = '{
-        apiKey: "AIzaSyCNtEKwrOSmfi_wn21WQr0WS7Yl-TK_isk",
+        apiKey: "",
         authDomain: "driver-tracker-5c786.firebaseapp.com",
         databaseURL: "https://driver-tracker-5c786.firebaseio.com",
         projectId: "driver-tracker-5c786",
